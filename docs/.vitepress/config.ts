@@ -1,6 +1,8 @@
+import { existsSync } from 'node:fs';
+import { createRequire } from 'node:module';
+import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import type { UserConfig } from 'vitepress';
-import { defineConfig } from 'vitepress';
+import { DefaultTheme, defineConfig } from 'vitepress';
 import {
   groupIconMdPlugin,
   groupIconVitePlugin,
@@ -8,9 +10,9 @@ import {
 } from 'vitepress-plugin-group-icons';
 import llmstxt from 'vitepress-plugin-llms';
 
-const CONFIG_LINK = '/options/input.md';
+const require = createRequire(import.meta.url);
 
-const sidebarForUserGuide: UserConfig['themeConfig']['sidebar'] = [
+const sidebarForUserGuide: DefaultTheme.SidebarItem[] = [
   {
     text: 'Guide',
     link: '/guide/getting-started.md',
@@ -27,8 +29,11 @@ const sidebarForUserGuide: UserConfig['themeConfig']['sidebar'] = [
   {
     text: 'APIs',
     items: [
-      { text: 'Configuration Options', link: CONFIG_LINK },
-      { text: 'Bundler API', link: '/apis/bundler-api.md' },
+      {
+        text: 'Configuration Options',
+        link: '/reference/Interface.BuildOptions.md',
+      },
+      { text: 'Bundler API', link: '/reference/Function.rolldown.md' },
       { text: 'Plugin API', link: '/apis/plugin-api.md' },
       { text: 'Plugin Hook Filters', link: '/apis/plugin-hook-filters.md' },
       { text: 'Command Line Interface', link: '/apis/cli.md' },
@@ -57,51 +62,52 @@ const sidebarForUserGuide: UserConfig['themeConfig']['sidebar'] = [
   },
 ];
 
-const sidebarForOptions: UserConfig['themeConfig']['sidebar'] = [
+function getTypedocSidebar() {
+  const filepath = path.resolve(
+    import.meta.dirname,
+    '../reference/typedoc-sidebar.json',
+  );
+  if (!existsSync(filepath)) return [];
+
+  try {
+    return require(filepath) as DefaultTheme.SidebarItem[];
+  } catch (error) {
+    console.error('Failed to load typedoc sidebar:', error);
+    return [];
+  }
+}
+
+const typedocSidebar = getTypedocSidebar().map((item) => ({
+  ...item,
+  collapsed: false,
+})).sort((a) => {
+  if (a.text === 'Functions') return -1;
+  return 0;
+});
+
+const sidebarForReference: DefaultTheme.SidebarItem[] = [
   {
-    text: 'Rolldown Options',
+    text: 'Quick Links',
     items: [
-      { text: 'input', link: '/options/input.md' },
-      { text: 'external', link: '/options/external.md' },
-      { text: 'resolve', link: '/options/resolve.md' },
-      { text: 'cwd', link: '/options/cwd.md' },
-      { text: 'platform', link: '/options/platform.md' },
-      { text: 'shimMissingExports', link: '/options/shim-missing-exports.md' },
-      { text: 'treeshake', link: '/options/treeshake.md' },
-      { text: 'logLevel', link: '/options/log-level.md' },
-      { text: 'onLog', link: '/options/on-log.md' },
-      { text: 'onwarn', link: '/options/onwarn.md' },
-      { text: 'moduleTypes', link: '/options/module-types.md' },
       {
-        text: 'preserveEntrySignatures',
-        link: '/options/preserve-entry-signatures.md',
-      },
-      { text: 'optimization', link: '/options/optimization.md' },
-      { text: 'context', link: '/options/context.md' },
-      { text: 'tsconfig', link: '/options/tsconfig.md' },
-      { text: 'experimental', link: '/options/experimental.md' },
-      { text: 'output', link: '/options/output.md' },
-      {
-        text: 'output.sourcemap',
-        link: '/options/output-sourcemap.md',
+        text: 'Input Options',
+        link: '/reference/Interface.InputOptions.md',
       },
       {
-        text: 'output.generatedCode',
-        link: '/options/output-generated-code.md',
+        text: 'Output Options',
+        link: '/reference/Interface.OutputOptions.md',
       },
       {
-        text: 'output.advancedChunks',
-        link: '/options/output-advanced-chunks.md',
+        text: 'Build Options',
+        link: '/reference/Interface.BuildOptions.md',
       },
-      {
-        text: 'output.cleanDir',
-        link: '/options/output-clean-dir.md',
-      },
+      { text: 'Bundler API', link: '/reference/Function.rolldown.md' },
     ],
   },
+  { text: 'API Reference', base: '/reference', items: typedocSidebar },
 ];
 
-const sidebarForDevGuide: UserConfig['themeConfig']['sidebar'] = [
+const sidebarForDevGuide: DefaultTheme.SidebarItem[] = [
   {
     text: 'Contribution Guide',
     items: [
@@ -149,7 +155,7 @@ const sidebarForDevGuide: UserConfig['themeConfig']['sidebar'] = [
   },
 ];
 
-const sidebarForPluginGuide: UserConfig['themeConfig']['sidebar'] = [
+const sidebarForPluginGuide: DefaultTheme.SidebarItem[] = [
   {
     text: 'Builtin Plugins',
     items: [
@@ -169,7 +175,7 @@ const sidebarForPluginGuide: UserConfig['themeConfig']['sidebar'] = [
   },
 ];
 
-const sidebarForGlossary: UserConfig['themeConfig']['sidebar'] = [
+const sidebarForGlossary: DefaultTheme.SidebarItem[] = [
   {
     text: 'Glossary',
     link: '/glossary/',
@@ -182,7 +188,7 @@ const sidebarForGlossary: UserConfig['themeConfig']['sidebar'] = [
   },
 ];
 
-const sidebarForResources: UserConfig['themeConfig']['sidebar'] = [
+const sidebarForResources: DefaultTheme.SidebarItem[] = [
   {
     text: 'Team',
     link: '/team.md',
@@ -249,7 +255,7 @@ export default defineConfig({
     // https://vitepress.dev/reference/default-theme-config
     nav: [
       { text: 'Guide', link: '/guide/getting-started.md' },
-      { text: 'Config', link: CONFIG_LINK },
+      { text: 'API', link: '/reference/' },
       { text: 'Plugins', link: '/builtin-plugins/' },
       { text: 'Contribute', link: '/contribution-guide/' },
       {
@@ -293,8 +299,8 @@ export default defineConfig({
       '/guide/': sidebarForUserGuide,
       '/apis/': sidebarForUserGuide,
       '/in-depth/': sidebarForUserGuide,
-      // --- Options ---
-      '/options/': sidebarForOptions,
+      // --- Reference ---
+      '/reference/': sidebarForReference,
       // --- Plugin ---
       '/builtin-plugins/': sidebarForPluginGuide,
       // --- Glossary ---

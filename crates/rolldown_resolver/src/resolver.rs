@@ -3,7 +3,7 @@ use arcstr::ArcStr;
 use dashmap::DashMap;
 use itertools::Itertools;
 use rolldown_common::{
-  ImportKind, ModuleDefFormat, PackageJson, Platform, ResolveOptions, ResolvedId,
+  ImportKind, ModuleDefFormat, PackageJson, Platform, ResolveOptions, ResolvedId, TsConfig,
 };
 use rolldown_fs::{FileSystem, OsFileSystem};
 use rolldown_utils::{dashmap::FxDashMap, indexmap::FxIndexMap};
@@ -15,7 +15,8 @@ use sugar_path::SugarPath;
 
 use oxc_resolver::{
   EnforceExtension, ModuleType, PackageJson as OxcPackageJson, Resolution, ResolveError,
-  ResolveOptions as OxcResolverOptions, ResolverGeneric, TsConfig,
+  ResolveOptions as OxcResolverOptions, ResolverGeneric, TsConfig as OxcTsConfig,
+  TsconfigReferences,
 };
 
 #[derive(Debug)]
@@ -63,7 +64,7 @@ impl<F: FileSystem + Clone> Resolver<F> {
     fs: F,
     cwd: PathBuf,
     platform: Platform,
-    tsconfig: Option<PathBuf>,
+    tsconfig: Option<&TsConfig>,
     raw_resolve: ResolveOptions,
   ) -> Self {
     let mut default_conditions = vec!["default".to_string()];
@@ -109,11 +110,14 @@ impl<F: FileSystem + Clone> Resolver<F> {
 
     let resolve_options_with_default_conditions = OxcResolverOptions {
       cwd: Some(cwd.clone()),
-      tsconfig: tsconfig.map(|tsconfig| {
-        oxc_resolver::TsconfigDiscovery::Manual(oxc_resolver::TsconfigOptions {
-          config_file: tsconfig,
-          references: oxc_resolver::TsconfigReferences::Disabled,
-        })
+      tsconfig: tsconfig.map(|tsconfig| match tsconfig {
+        TsConfig::Auto => oxc_resolver::TsconfigDiscovery::Auto,
+        TsConfig::Special(config_file) => {
+          oxc_resolver::TsconfigDiscovery::Manual(oxc_resolver::TsconfigOptions {
+            config_file: config_file.clone(),
+            references: oxc_resolver::TsconfigReferences::Disabled,
+          })
+        }
       }),
       alias: raw_resolve
         .alias
@@ -301,8 +305,12 @@ impl<F: FileSystem> Resolver<F> {
     }
   }
 
-  pub fn resolve_tsconfig<T: AsRef<Path>>(&self, path: &T) -> Result<Arc<TsConfig>, ResolveError> {
-    self.default_resolver.resolve_tsconfig(path)
+  pub fn resolve_tsconfig<T: AsRef<Path>>(
+    &self,
+    path: &T,
+    references: &TsconfigReferences,
+  ) -> Result<Arc<OxcTsConfig>, ResolveError> {
+    self.default_resolver.resolve_tsconfig_with_references(path, references)
   }
 }
 

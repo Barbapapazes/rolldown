@@ -1889,7 +1889,7 @@ export interface BindingInputOptions {
   preserveEntrySignatures?: BindingPreserveEntrySignatures
   optimization?: BindingOptimization
   context?: string
-  tsconfig?: string
+  tsconfig?: true | string
 }
 
 export interface BindingIsolatedDeclarationPluginConfig {

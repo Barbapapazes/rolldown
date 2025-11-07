@@ -5,6 +5,7 @@ use memchr::memmem;
 use oxc::{span::SourceType, transformer::TransformOptions};
 use rolldown_common::{JsxOptions, ModuleType};
 use rolldown_plugin::SharedTransformPluginContext;
+use rolldown_resolver::TsconfigReferences;
 use rolldown_utils::{pattern_filter::filter as pattern_filter, url::clean_url};
 
 use super::TransformPlugin;
@@ -119,7 +120,9 @@ impl TransformPlugin {
 
     if source_type.is_typescript() {
       let path = Path::new(cwd).join(id).parent().and_then(find_tsconfig_json_for_file);
-      let tsconfig = path.map(|path| ctx.resolver().resolve_tsconfig(&path)).transpose()?;
+      let tsconfig = path
+        .map(|path| ctx.resolver().resolve_tsconfig(&path, &TsconfigReferences::Auto))
+        .transpose()?;
 
       if let Some(tsconfig) = tsconfig {
         // Tsconfig could be out of root, make sure it is watched

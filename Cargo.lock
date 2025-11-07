@@ -966,7 +966,7 @@ dependencies = [
  "cow-utils",
  "heck",
  "oxc",
- "oxc_resolver 11.13.1 (git+https://github.com/oxc-project/oxc-resolver)",
+ "oxc_resolver 11.13.1 (git+https://github.com/oxc-project/oxc-resolver?branch=11-06-feat_tsconfig_implement_solution-style_tsconfig_resolution)",
  "prettyplease",
  "proc-macro2",
  "quote",
@@ -2153,9 +2153,10 @@ dependencies = [
 [[package]]
 name = "oxc_resolver"
 version = "11.13.1"
-source = "git+https://github.com/oxc-project/oxc-resolver#e35ded7cbb09cc048553a4842dde8389dc0ff825"
+source = "git+https://github.com/oxc-project/oxc-resolver?branch=11-06-feat_tsconfig_implement_solution-style_tsconfig_resolution#5247e59ed8f97194fb135828f1ae19fcd4f50d00"
 dependencies = [
  "cfg-if",
+ "fast-glob",
  "indexmap",
  "json-strip-comments",
  "once_cell",
@@ -2865,7 +2866,7 @@ dependencies = [
  "oxc",
  "oxc_ecmascript",
  "oxc_index",
- "oxc_resolver 11.13.1 (git+https://github.com/oxc-project/oxc-resolver)",
+ "oxc_resolver 11.13.1 (git+https://github.com/oxc-project/oxc-resolver?branch=11-06-feat_tsconfig_implement_solution-style_tsconfig_resolution)",
  "rolldown_ecmascript",
  "rolldown_error",
  "rolldown_sourcemap",
@@ -2945,7 +2946,7 @@ dependencies = [
  "heck",
  "napi",
  "oxc",
- "oxc_resolver 11.13.1 (git+https://github.com/oxc-project/oxc-resolver)",
+ "oxc_resolver 11.13.1 (git+https://github.com/oxc-project/oxc-resolver?branch=11-06-feat_tsconfig_implement_solution-style_tsconfig_resolution)",
  "rolldown-ariadne",
  "rolldown_utils",
  "ropey",
@@ -2965,7 +2966,7 @@ dependencies = [
 name = "rolldown_fs"
 version = "0.1.0"
 dependencies = [
- "oxc_resolver 11.13.1 (git+https://github.com/oxc-project/oxc-resolver)",
+ "oxc_resolver 11.13.1 (git+https://github.com/oxc-project/oxc-resolver?branch=11-06-feat_tsconfig_implement_solution-style_tsconfig_resolution)",
  "vfs",
 ]
 
@@ -3261,6 +3262,7 @@ dependencies = [
  "rolldown_error",
  "rolldown_plugin",
  "rolldown_plugin_utils",
+ "rolldown_resolver",
  "rolldown_utils",
 ]
 
@@ -3352,7 +3354,7 @@ dependencies = [
  "derive_more",
  "fast-glob",
  "owo-colors",
- "oxc_resolver 11.13.1 (git+https://github.com/oxc-project/oxc-resolver)",
+ "oxc_resolver 11.13.1 (git+https://github.com/oxc-project/oxc-resolver?branch=11-06-feat_tsconfig_implement_solution-style_tsconfig_resolution)",
  "rolldown_common",
  "rolldown_plugin",
  "rolldown_plugin_utils",
@@ -3400,7 +3402,7 @@ dependencies = [
  "arcstr",
  "dashmap",
  "itertools",
- "oxc_resolver 11.13.1 (git+https://github.com/oxc-project/oxc-resolver)",
+ "oxc_resolver 11.13.1 (git+https://github.com/oxc-project/oxc-resolver?branch=11-06-feat_tsconfig_implement_solution-style_tsconfig_resolution)",
  "rolldown_common",
  "rolldown_fs",
  "rolldown_utils",

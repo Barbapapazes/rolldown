@@ -966,7 +966,7 @@ dependencies = [
  "cow-utils",
  "heck",
  "oxc",
- "oxc_resolver",
+ "oxc_resolver 11.13.1 (git+https://github.com/oxc-project/oxc-resolver)",
  "prettyplease",
  "proc-macro2",
  "quote",
@@ -2151,6 +2151,30 @@ dependencies = [
 ]
 
 [[package]]
+name = "oxc_resolver"
+version = "11.13.1"
+source = "git+https://github.com/oxc-project/oxc-resolver#e35ded7cbb09cc048553a4842dde8389dc0ff825"
+dependencies = [
+ "cfg-if",
+ "indexmap",
+ "json-strip-comments",
+ "once_cell",
+ "papaya",
+ "pnp",
+ "rustc-hash",
+ "rustix",
+ "self_cell",
+ "serde",
+ "serde_json",
+ "simd-json",
+ "simdutf8",
+ "thiserror 2.0.17",
+ "tracing",
+ "url",
+ "windows",
+]
+
+[[package]]
 name = "oxc_resolver_napi"
 version = "11.13.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2160,7 +2184,7 @@ dependencies = [
  "napi",
  "napi-build",
  "napi-derive",
- "oxc_resolver",
+ "oxc_resolver 11.13.1 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -2841,7 +2865,7 @@ dependencies = [
  "oxc",
  "oxc_ecmascript",
  "oxc_index",
- "oxc_resolver",
+ "oxc_resolver 11.13.1 (git+https://github.com/oxc-project/oxc-resolver)",
  "rolldown_ecmascript",
  "rolldown_error",
  "rolldown_sourcemap",
@@ -2921,7 +2945,7 @@ dependencies = [
  "heck",
  "napi",
  "oxc",
- "oxc_resolver",
+ "oxc_resolver 11.13.1 (git+https://github.com/oxc-project/oxc-resolver)",
  "rolldown-ariadne",
  "rolldown_utils",
  "ropey",
@@ -2941,7 +2965,7 @@ dependencies = [
 name = "rolldown_fs"
 version = "0.1.0"
 dependencies = [
- "oxc_resolver",
+ "oxc_resolver 11.13.1 (git+https://github.com/oxc-project/oxc-resolver)",
  "vfs",
 ]
 
@@ -3328,7 +3352,7 @@ dependencies = [
  "derive_more",
  "fast-glob",
  "owo-colors",
- "oxc_resolver",
+ "oxc_resolver 11.13.1 (git+https://github.com/oxc-project/oxc-resolver)",
  "rolldown_common",
  "rolldown_plugin",
  "rolldown_plugin_utils",
@@ -3376,7 +3400,7 @@ dependencies = [
  "arcstr",
  "dashmap",
  "itertools",
- "oxc_resolver",
+ "oxc_resolver 11.13.1 (git+https://github.com/oxc-project/oxc-resolver)",
  "rolldown_common",
  "rolldown_fs",
  "rolldown_utils",

@@ -87,11 +87,11 @@ pub async fn load_source<Fs: FileSystem + 'static>(
                   Some(s) => s.into_bytes(),
                   None => {
                     if cfg!(target_family = "wasm") {
-                      fs.read(resolved_id.id.as_path())?
+                      FileSystem::read(&fs, resolved_id.id.as_path())?
                     } else {
                       let id = resolved_id.id.clone();
                       tokio::runtime::Handle::current()
-                        .spawn_blocking(move || fs.read(id.as_path()))
+                        .spawn_blocking(move || FileSystem::read(&fs, id.as_path()))
                         .await??
                     }
                   }
@@ -181,9 +181,11 @@ async fn read_file_by_module_type<Fs: FileSystem + 'static>(
     ModuleType::Base64 | ModuleType::Binary | ModuleType::Dataurl | ModuleType::Asset => {
       Ok(StrOrBytes::Bytes({
         if cfg!(target_family = "wasm") {
-          fs.read(&path)?
+          FileSystem::read(&fs, &path)?
         } else {
-          tokio::runtime::Handle::current().spawn_blocking(move || fs.read(&path)).await??
+          tokio::runtime::Handle::current()
+            .spawn_blocking(move || FileSystem::read(&fs, &path))
+            .await??
         }
       }))
     }

@@ -114,6 +114,16 @@ impl OxcResolverFileSystem for MemoryFileSystem {
     Self::default()
   }
 
+  fn read(&self, path: &Path) -> io::Result<Vec<u8>> {
+    let mut buf = Vec::new();
+    self
+      .fs
+      .open_file(&path.to_string_lossy())
+      .map_err(|err| io::Error::new(io::ErrorKind::NotFound, err))?
+      .read_to_end(&mut buf)?;
+    Ok(buf)
+  }
+
   fn read_to_string(&self, path: &Path) -> io::Result<String> {
     let mut buf = String::new();
     self
@@ -189,7 +199,8 @@ mod tests {
 
     assert_eq!(
       utils_content.to_vec(),
-      fs.read(Path::new("/module_2/utils/index.js")).map_err(|err| err.to_string())?
+      crate::FileSystem::read(&fs, Path::new("/module_2/utils/index.js"))
+        .map_err(|err| err.to_string())?
     );
 
     Ok(())

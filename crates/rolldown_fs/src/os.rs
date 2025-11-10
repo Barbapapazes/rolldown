@@ -59,6 +59,10 @@ impl OxcResolverFileSystem for OsFileSystem {
     Self(Arc::new(FileSystemOs::new(yarn_pnp)))
   }
 
+  fn read(&self, path: &Path) -> io::Result<Vec<u8>> {
+    self.0.read(path)
+  }
+
   fn read_to_string(&self, path: &Path) -> io::Result<String> {
     self.0.read_to_string(path)
   }
